@@ -13,8 +13,7 @@
     outline: none;
     border: none;
     text-decoration: none;
-    transition: .2 linear;
-
+    transition: .2s linear;
 }
 
 html{
@@ -162,10 +161,31 @@ section{
     padding: 1rem 0;
     line-height: 1.8;
 }
-.menu .box-container{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+.menu {
+    position: relative;
+    overflow: hidden;
+}
+
+.menu .box-container {
+    display: inline-flex; /* Hiển thị theo hàng ngang */
     gap: 1.5rem;
+    overflow-x: auto;
+    scroll-behavior: smooth; /* Thêm hiệu ứng mượt mà khi cuộn */
+}
+.box-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Thêm hiệu ứng chuyển đổi */
+}
+
+.menu-box {
+    display: flex;
+    flex: 0 0 100%; /* Đảm bảo mỗi menu-box chiếm toàn bộ chiều rộng */
+}
+
+.box {
+    margin: 10px;
+    width: calc(33.33% - 20px); /* Chia đều 3 mục trong mỗi box */
+    box-sizing: border-box;
 }
 .menu .box-container .box {
     padding: 5rem;
@@ -192,6 +212,31 @@ section{
 }
 .menu .box-container .box:hover >*{
     color: var(--black);
+}
+/* Dấu mũi tên cuộn */
+.scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 2rem;
+    padding: 1rem;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+}
+
+.scroll-button.left {
+    left: 0;
+}
+
+.scroll-button.right {
+    right: 0;
+}
+
+.scroll-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
 }
 .contact .row{
     display: -webkit-box;
@@ -352,3 +397,292 @@ section{
         font-size: 50%;
     }
 }
+.order-summary {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.total-box {
+    background-color: var(--main-color);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    text-align: center;
+    min-width: 250px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.total-box h3 {
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.total-box p {
+    color: #fff;
+    font-size: 2rem;
+    margin: 10px 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+#checkout-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+#checkout-btn:hover {
+    background: #fff;
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(211, 173, 127, 0.4);
+}
+
+#checkout-btn i {
+    font-size: 2rem;
+}
+
+/* Add animation for the total box */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.order-summary {
+    animation: slideIn 0.5s ease-out;
+}
+
+/* Add responsive styles */
+@media (max-width: 768px) {
+    .order-summary {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
+    
+    .total-box {
+        min-width: auto;
+    }
+}
+
+.bill-items {
+    margin: 20px 0;
+}
+
+.bill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 1.6rem;
+}
+
+.item-details {
+    display: flex;
+    gap: 15px;
+}
+
+.item-name {
+    font-weight: 500;
+    color: var(--main-color);
+}
+
+.item-quantity {
+    color: #666;
+}
+
+.item-total {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.bill-summary {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--primary-color);
+    font-size: 1.8rem;
+}
+
+.total-items {
+    color: var(--main-color);
+    margin-bottom: 10px;
+}
+
+.total-amount {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.bill-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-width: 500px;
+    width: 90%;
+}
+
+.bill-container h2 {
+    color: var(--main-color);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.4rem;
+}
+
+.payment-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.thank-you-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    text-align: center;
+}
+
+.thank-you-container h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 2.4rem;
+}
+
+.thank-you-container p {
+    color: var(--main-color);
+    font-size: 1.8rem;
+}
+
+.bill-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+    padding: 20px;
+}
+
+.bill-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    max-width: 600px;
+    width: 100%;
+}
+
+.timestamp {
+    color: #666;
+    font-size: 1.4rem;
+    margin-top: 10px;
+    text-align: right;
+}
+
+@media print {
+    .payment-buttons {
+        display: none;
+    }
+}
+
+/* Style cho phần chọn số lượng */
+.quantity-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 1rem;
+}
+
+.quantity-box .btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 2rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: 2px solid var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    margin: 0;
+}
+
+.quantity-box .btn:hover {
+    background-color: #fff;
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.quantity-box .quantity {
+    font-size: 2.5rem;
+    color: #fff;
+    min-width: 4rem;
+    text-align: center;
+    font-weight: 500;
+    position: relative;
+}
+
+/* Add animation for quantity changes */
+@keyframes quantityPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.quantity-change {
+    animation: quantityPop 0.3s ease;
+}
+
+/* Add hover effect for the entire box */
+.box:hover .quantity-box .btn {
+    border-color: var(--black);
+}
+
+.box:hover .quantity-box .btn:hover {
+    background-color: var(--black);
+    color: #fff;
+}
+
+  

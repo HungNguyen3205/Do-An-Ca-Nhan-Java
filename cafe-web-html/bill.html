@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shop Bill</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bill.css">
+</head>
+<body>
+    <div class="bill-container">
+        <div class="bill-header">
+            <h1><i class="fas fa-coffee"></i> Coffee Shop</h1>
+            <p>Chi tiết đơn hàng của bạn</p>
+        </div>
+        <div class="bill-details" id="bill-details">
+            <!-- Bill items will be inserted here -->
+        </div>
+        <div class="qr-code">
+            <img id="qr-code" src="https://scontent.fdad8-1.fna.fbcdn.net/v/t1.15752-9/462553101_893024696310634_6602171106078779607_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeEFEKMrxmpL_wrhmZnhOCwsXY-SIBZwQuNdj5IgFnBC424OfESLTvqRCP_efsvN7xDBR3qVu8cvQY50TlgdAnef&_nc_ohc=IGCqxnBUczEQ7kNvgH2sPIg&_nc_zt=23&_nc_ht=scontent.fdad8-1.fna&oh=03_Q7cD1QHrssr3zsYX9Z0HwPyFtF5U2BkcLsRlqVSKC5hL8TbD3A&oe=677EFA1E" alt="Payment QR Code">
+            <p>Scan to pay</p>
+        </div>
+        <div class="total" id="total">
+            <!-- Total will be inserted here -->
+        </div>
+        <div class="reset-button">
+            <button onclick="resetBill()">
+                <i class="fas fa-redo"></i> Đặt lại đơn hàng
+            </button>
+        </div>
+    </div>
+    <script src="bill.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const billDetails = document.getElementById('bill-details');
+        const totalElement = document.getElementById('total');
+
+        const menuItems = [
+            { id: 'coffee-black', name: 'Cà phê đen', price: 12000 },
+            { id: 'coffee-milk', name: 'Cà phê sữa', price: 15000 },
+            { id: 'bacc-xiu', name: 'Bạc xỉu', price: 18000 },
+            { id: 'cacao-ice', name: 'Ca cao đá', price: 20000 },
+            { id: 'cacao-hot', name: 'Ca cao nóng', price: 22000 },
+            { id: 'coffee-salt', name: 'Cà phê muối', price: 20000 }
+        ];
+
+        let totalAmount = 0;
+        let totalTypes = 0;
+
+        // Check if there are any items in the cart
+        
+
+        if (!hasItems) {
+            billDetails.innerHTML = '<p style="text-align: center;">Không có sản phẩm nào được chọn</p>';
+            totalElement.innerHTML = '<p>Tổng cộng: 0 VNĐ</p>';
+            document.querySelector('.qr-code').style.display = 'none';
+            return;
+        }
+
+        
+
+        totalElement.innerHTML = `
+            <p>Tổng số loại đồ uống: ${totalTypes}</p>
+            <p>Tổng cộng: ${totalAmount.toLocaleString()} VNĐ</p>
+        `;
+    });
+    </script>
+</body>
+</html> 
