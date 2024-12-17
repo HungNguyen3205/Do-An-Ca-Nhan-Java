@@ -10,6 +10,7 @@ public class JAVADOANCANHAN {
             e.printStackTrace();
         }
         
+        
         SwingUtilities.invokeLater(() -> {
             QuanLyFrame mainFrame = new QuanLyFrame();
             mainFrame.setVisible(true);
