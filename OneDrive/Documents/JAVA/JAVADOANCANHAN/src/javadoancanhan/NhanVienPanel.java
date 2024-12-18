@@ -2,55 +2,52 @@ package javadoancanhan;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class NhanVienPanel extends JPanel {
     private JTable table;
     private DefaultTableModel model;
-    private JTextField txtMaNV, txtHoTen, txtNgaySinh, txtDiaChi, txtSDT, txtChucVu, txtLuong;
+    private JTextField txtMaSV, txtHoTen, txtTuoi, txtDiaChi;
+    private JComboBox<String> cboGioiTinh;
     private JButton btnThem, btnSua, btnXoa, btnMoi;
-    private DecimalFormat formatter;
+    private List<Student> studentList;
 
     public NhanVienPanel() {
         setLayout(new BorderLayout(10, 10));
-        formatter = new DecimalFormat("#,###");
+        studentList = new ArrayList<>();
         initComponents();
     }
 
     private void initComponents() {
         // Panel nhập liệu
-        JPanel inputPanel = new JPanel(new GridLayout(7, 2, 5, 5));
-        inputPanel.setBorder(BorderFactory.createTitledBorder("Thông tin nhân viên"));
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2, 5, 5));
+        inputPanel.setBorder(BorderFactory.createTitledBorder("Thông tin sinh viên"));
 
-        inputPanel.add(new JLabel("Mã NV:"));
-        txtMaNV = new JTextField();
-        inputPanel.add(txtMaNV);
+        inputPanel.add(new JLabel("Mã SV:"));
+        txtMaSV = new JTextField();
+        inputPanel.add(txtMaSV);
 
         inputPanel.add(new JLabel("Họ tên:"));
         txtHoTen = new JTextField();
         inputPanel.add(txtHoTen);
+        
+        inputPanel.add(new JLabel("Giới tính:"));
+        String[] genders = {"Nam", "Nữ", "Khác"};
+        cboGioiTinh = new JComboBox<>(genders);
+        inputPanel.add(cboGioiTinh);
 
-        inputPanel.add(new JLabel("Ngày sinh:"));
-        txtNgaySinh = new JTextField();
-        inputPanel.add(txtNgaySinh);
+        inputPanel.add(new JLabel("Tuổi :"));
+        txtTuoi = new JTextField();
+        inputPanel.add(txtTuoi);
 
         inputPanel.add(new JLabel("Địa chỉ:"));
         txtDiaChi = new JTextField();
         inputPanel.add(txtDiaChi);
 
-        inputPanel.add(new JLabel("Số điện thoại:"));
-        txtSDT = new JTextField();
-        inputPanel.add(txtSDT);
-
-        inputPanel.add(new JLabel("Chức vụ:"));
-        txtChucVu = new JTextField();
-        inputPanel.add(txtChucVu);
-
-        inputPanel.add(new JLabel("Lương:"));
-        txtLuong = new JTextField();
-        inputPanel.add(txtLuong);
+        
 
         // Panel chứa nút
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -65,7 +62,7 @@ public class NhanVienPanel extends JPanel {
         buttonPanel.add(btnMoi);
 
         // Tạo bảng
-        String[] columns = {"Mã NV", "Họ tên", "Ngày sinh", "Địa chỉ", "SĐT", "Chức vụ", "Lương"};
+        String[] columns = {"Mã SV", "Họ tên", "Tuổi", "Địa chỉ", "Giới tính"};
         model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -89,9 +86,9 @@ public class NhanVienPanel extends JPanel {
 
     private void addEvents() {
         btnMoi.addActionListener(e -> lamMoi());
-        btnThem.addActionListener(e -> themNhanVien());
-        btnXoa.addActionListener(e -> xoaNhanVien());
-        btnSua.addActionListener(e -> suaNhanVien());
+        btnThem.addActionListener(e -> themSinhVien());
+        btnXoa.addActionListener(e -> xoaSinhVien());
+        btnSua.addActionListener(e -> suaSinhVien());
         
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -105,100 +102,129 @@ public class NhanVienPanel extends JPanel {
     }
 
     private void lamMoi() {
-        txtMaNV.setText("");
+        txtMaSV.setText("");
         txtHoTen.setText("");
-        txtNgaySinh.setText("");
+        txtTuoi.setText("");
         txtDiaChi.setText("");
-        txtSDT.setText("");
-        txtChucVu.setText("");
-        txtLuong.setText("");
+        cboGioiTinh.setSelectedIndex(0);
         table.clearSelection();
     }
 
     private boolean validateInput() {
-        if (txtMaNV.getText().trim().isEmpty() || 
+        if (txtMaSV.getText().trim().isEmpty() || 
             txtHoTen.getText().trim().isEmpty() || 
-            txtNgaySinh.getText().trim().isEmpty()) {
+            txtTuoi.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin bắt buộc");
             return false;
         }
         
         try {
-            if (!txtLuong.getText().trim().isEmpty()) {
-                Double.parseDouble(txtLuong.getText().trim());
+            int tuoi = Integer.parseInt(txtTuoi.getText().trim());
+            if (tuoi <= 0) {
+                JOptionPane.showMessageDialog(this, "Tuổi phải là số dương");
+                return false;
             }
             return true;
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Lương phải là số");
+            JOptionPane.showMessageDialog(this, "Tuổi phải là số");
             return false;
         }
     }
 
-    private void themNhanVien() {
+    private void themSinhVien() {
         if (!validateInput()) {
             return;
         }
 
-        String luongStr = txtLuong.getText().trim().isEmpty() ? "0" : 
-                         formatter.format(Double.parseDouble(txtLuong.getText().trim()));
-
-        String[] data = {
-            txtMaNV.getText(),
+        Student student = new Student(
+            txtMaSV.getText(),
             txtHoTen.getText(),
-            txtNgaySinh.getText(),
+            Integer.parseInt(txtTuoi.getText().trim()),
             txtDiaChi.getText(),
-            txtSDT.getText(),
-            txtChucVu.getText(),
-            luongStr
+            cboGioiTinh.getSelectedItem().toString()
+        );
+        
+        studentList.add(student);
+        DataManager.saveData(studentList);
+        
+        String[] data = {
+            student.getMaSV(),
+            student.getHoTen(),
+            String.valueOf(student.getTuoi()),
+            student.getDiaChi(),
+            student.getGioiTinh()
         };
         model.addRow(data);
         lamMoi();
     }
 
-    private void xoaNhanVien() {
+    private void xoaSinhVien() {
         int row = table.getSelectedRow();
         if (row >= 0) {
             int confirm = JOptionPane.showConfirmDialog(this, 
-                "Bạn có chắc muốn xóa nhân viên này?", 
+                "Bạn có chắc muốn xóa sinh viên này?", 
                 "Xác nhận xóa", 
                 JOptionPane.YES_NO_OPTION);
             
             if (confirm == JOptionPane.YES_OPTION) {
+                studentList.remove(row);
+                DataManager.saveData(studentList);
                 model.removeRow(row);
                 lamMoi();
             }
         }
     }
 
-    private void suaNhanVien() {
+    private void suaSinhVien() {
         if (!validateInput()) {
             return;
         }
 
         int row = table.getSelectedRow();
         if (row >= 0) {
-            String luongStr = txtLuong.getText().trim().isEmpty() ? "0" : 
-                             formatter.format(Double.parseDouble(txtLuong.getText().trim()));
-
-            model.setValueAt(txtMaNV.getText(), row, 0);
+            Student student = studentList.get(row);
+            student.setMaSV(txtMaSV.getText());
+            student.setHoTen(txtHoTen.getText());
+            student.setTuoi(Integer.parseInt(txtTuoi.getText().trim()));
+            student.setDiaChi(txtDiaChi.getText());
+            student.setGioiTinh(cboGioiTinh.getSelectedItem().toString());
+            
+            DataManager.saveData(studentList);
+            
+            model.setValueAt(txtMaSV.getText(), row, 0);
             model.setValueAt(txtHoTen.getText(), row, 1);
-            model.setValueAt(txtNgaySinh.getText(), row, 2);
+            model.setValueAt(txtTuoi.getText(), row, 2);
             model.setValueAt(txtDiaChi.getText(), row, 3);
-            model.setValueAt(txtSDT.getText(), row, 4);
-            model.setValueAt(txtChucVu.getText(), row, 5);
-            model.setValueAt(luongStr, row, 6);
+            model.setValueAt(cboGioiTinh.getSelectedItem().toString(), row, 4);
             
             lamMoi();
         }
     }
 
     private void hienThiThongTin(int row) {
-        txtMaNV.setText(model.getValueAt(row, 0).toString());
+        txtMaSV.setText(model.getValueAt(row, 0).toString());
         txtHoTen.setText(model.getValueAt(row, 1).toString());
-        txtNgaySinh.setText(model.getValueAt(row, 2).toString());
+        txtTuoi.setText(model.getValueAt(row, 2).toString());
         txtDiaChi.setText(model.getValueAt(row, 3).toString());
-        txtSDT.setText(model.getValueAt(row, 4).toString());
-        txtChucVu.setText(model.getValueAt(row, 5).toString());
-        txtLuong.setText(model.getValueAt(row, 6).toString());
+        cboGioiTinh.setSelectedItem(model.getValueAt(row, 4).toString());
+    }
+
+    public void loadData() {
+        studentList = DataManager.loadData();
+        updateTableFromList();
+    }
+
+    private void updateTableFromList() {
+        model.setRowCount(0);
+        for (Student student : studentList) {
+            Object[] row = {
+                student.getMaSV(),
+                student.getHoTen(),
+                student.getTuoi(),
+                student.getDiaChi(),
+                student.getGioiTinh()
+            };
+            model.addRow(row);
+        }
     }
 } 
