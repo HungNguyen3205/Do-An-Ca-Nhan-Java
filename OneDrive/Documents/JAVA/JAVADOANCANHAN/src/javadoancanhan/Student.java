@@ -2,15 +2,19 @@ package javadoancanhan;
 
 import java.io.Serializable;
 
+// Class đại diện cho thông tin của một sinh viên
 public class Student implements Serializable {
+    // SerialVersionUID để đảm bảo tính tương thích khi serialize
     private static final long serialVersionUID = 1L;
     
-    private String maSV;
-    private String hoTen;
-    private int tuoi;
-    private String diaChi;
-    private String gioiTinh;
+    // Các thuộc tính của sinh viên
+    private String maSV;      // Mã sinh viên
+    private String hoTen;     // Họ tên sinh viên
+    private int tuoi;         // Tuổi
+    private String diaChi;    // Địa chỉ
+    private String gioiTinh;  // Giới tính
     
+    // Constructor để khởi tạo đối tượng sinh viên
     public Student(String maSV, String hoTen, int tuoi, String diaChi, String gioiTinh) {
         this.maSV = maSV;
         this.hoTen = hoTen;
@@ -19,7 +23,7 @@ public class Student implements Serializable {
         this.gioiTinh = gioiTinh;
     }
     
-    // Getters và Setters
+    // Các phương thức getter và setter
     public String getMaSV() { return maSV; }
     public void setMaSV(String maSV) { this.maSV = maSV; }
     
